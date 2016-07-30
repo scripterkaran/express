@@ -12,6 +12,11 @@ router.get('/', function(req, res, next) {
               res.format({
                   //HTML response will render the userlist.jade file in the views folder. We are also setting "userlist" to be an accessible variable in our jade view
                 html: function(){
+                    for (i = 0; i < blogs.length; i++) {
+                        if (blogs[i].content.length > 300){
+                            blogs[i].content = blogs[i].content.substring(0, 300)
+                        }
+                    }
                     res.render('bloglist', {
                           "bloglist" : blogs
                       });

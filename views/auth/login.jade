@@ -1,0 +1,13 @@
+//
+   Created by karan on 31/7/16.
+
+extends ../layout
+
+block content
+  h1= title
+  p Welcome to #{title}
+
+  form#formAddUser(name="login",method="post",action="/auth/login")
+      input(type="text", placeholder="username", name="username")
+      input(type="password", placeholder="password", name="password")
+      button#btnSubmit(type="submit") submit

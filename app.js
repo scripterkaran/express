@@ -4,7 +4,7 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-
+var session      = require('express-session');
 var mongo = require('mongodb');
 //var monk = require('monk');
 //var db = monk('localhost:27017/nodetest1');
@@ -13,7 +13,9 @@ var user = require('./models/user');
 var routes = require('./routes/index');
 var userRoute = require('./routes/users');
 var BlogRoute = require('./routes/blog');
-
+var AuthRouter = require('./routes/auth');
+var passport = require('passport');
+var flash    = require('connect-flash');
 var app = express();
 
 // view engine setup
@@ -38,6 +40,7 @@ app.use(function(req,res,next){
 //app.use('/', routes);
 app.use('/', userRoute);
 app.use('/blog', BlogRoute)
+app.use('/auth', AuthRouter)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -70,5 +73,9 @@ app.use(function(err, req, res, next) {
   });
 });
 
+app.use(session({ secret: 'ilovescotchscotchyscotchscotch' })); // session secret
+app.use(passport.initialize());
+app.use(passport.session()); // persistent login sessions
+app.use(flash()); // use connect-flash for flash messages stored in session
 
 module.exports = app;
