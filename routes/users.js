@@ -6,9 +6,7 @@ var User = require('../models/user.js');
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
-        //retrieve all users from Monogo
-
-
+    //retrieve all users from Monogo
         User.find({}, function (err, users) {
               if (err) {
                   return console.error(err);
@@ -35,12 +33,28 @@ router.get('/newuser', function(req, res) {
     res.render('newuser', { title: 'Add New User' });
 });
 
+router.get(/^\/commits\/(\w+)(?:\.\.(\w+))?$/, function(req, res){
+  var from = req.params[0];
+  var to = req.params[1] || 'HEAD';
+  res.send('commit range ' + from + '..' + to);
+});
+
+router.route('/users/:name').all(function(req, res, next) {
+  // runs for all HTTP verbs first
+  // think of it as route specific middleware!
+  res.send('hello ' + req.params.name + '!');
+  next();
+})
+.get(function(req, res, next) {
+  res.json(req.user);
+});
+
 router.post('/adduser', function(req, res) {
     // Get values from POST request. These can be done through forms or REST calls. These rely on the "name" attributes for forms
     var name = req.body.name;
     var userName = req.body.username;
     var userEmail = req.body.useremail;
-    var password = req.body.userpassword
+    var password = req.body.userpassword;
     //call the create function for our database
     User.create({
         name : name,

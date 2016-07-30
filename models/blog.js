@@ -3,11 +3,9 @@ var Schema = mongoose.Schema;
 
 var blogSchema = new Schema({
   title: {type: String},
-  content: { type: String, required: true}
-  //email: {type: String, required: true, unique: true}
+  content: { type: String, required: true},
+  created_by :{type:Schema.Types.ObjectId , ref: 'User' }
 });
-
-
 
 
 

@@ -11,7 +11,8 @@ var mongo = require('mongodb');
 var db = require('./models/db');
 var user = require('./models/user');
 var routes = require('./routes/index');
-var users = require('./routes/users');
+var userRoute = require('./routes/users');
+var BlogRoute = require('./routes/blog');
 
 var app = express();
 
@@ -34,8 +35,9 @@ app.use(function(req,res,next){
     next();
 });
 
-app.use('/', routes);
-app.use('/users', users);
+//app.use('/', routes);
+app.use('/', userRoute);
+app.use('/blog', BlogRoute)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

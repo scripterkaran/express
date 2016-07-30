@@ -1,0 +1,10 @@
+extends layout
+
+block content
+    h1.
+        Blog List
+    ul
+        each user, i in bloglist
+            li
+                a()= blog.title
+
