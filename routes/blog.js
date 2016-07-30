@@ -25,4 +25,8 @@ router.get('/', function(req, res, next) {
     });
 });
 
+router.get('/new', function(req, res) {
+    res.render('newblog', { title: 'New Blog' });
+});
+
 module.exports = router
