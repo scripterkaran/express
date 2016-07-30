@@ -4,7 +4,10 @@ block content
     h1.
         Blog List
     ul
-        each user, i in bloglist
+        each blog, i in bloglist
             li
-                a()= blog.title
+                a(href='/blog/'+blog._id)= blog.title
+            p= blog
 
+    button
+        a(href='/blog/new') Add New Blog
