@@ -1,11 +1,15 @@
 var express = require('express');
 var router = express.Router();
 var mongoose = require('mongoose');
+//var User = require('.models/user')
+var User = require('../models/user.js');
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
         //retrieve all users from Monogo
-        mongoose.model('User').find({}, function (err, users) {
+
+
+        User.find({}, function (err, users) {
               if (err) {
                   return console.error(err);
               } else {
@@ -36,14 +40,16 @@ router.post('/adduser', function(req, res) {
     var name = req.body.name;
     var userName = req.body.username;
     var userEmail = req.body.useremail;
+    var password = req.body.userpassword
     //call the create function for our database
-    mongoose.model('User').create({
+    User.create({
         name : name,
         username: userName,
-        email: userEmail
+        email: userEmail,
+        password: password
     }, function (err, user) {
           if (err) {
-              res.send("There was a problem adding the information to the database.");
+              res.send("There was a problem adding the information to the database.", err);
           } else {
               //User has been created
               console.log('POST creating new user: ' + user);
