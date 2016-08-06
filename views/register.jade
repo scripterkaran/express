@@ -1,0 +1,16 @@
+extends layout
+
+block content
+    h1= title
+    ul
+        if errors
+            each e, i in errors
+                div= e.msg
+
+    form#formAddUser(method="post",action="/user/register")
+        input#inputName(type="text", placeholder="Name", name="name")
+        input#inputUserName(type="text", placeholder="Username", name="username")
+        input(type="text", placeholder="Email", name="email")
+        input(type="password", placeholder="password", name="password")
+        input(type="password", placeholder="password", name="password2")
+        button#btnSubmit(type="submit") submit

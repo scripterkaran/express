@@ -29,59 +29,49 @@ router.get('/', function(req, res, next) {
 });
 
 /* GET New User page. */
-router.get('/newuser', function(req, res) {
-    res.render('newuser', { title: 'Add New User' });
+router.get('/register', function(req, res) {
+    res.render('register', { title: 'Add New User' });
 });
 
-router.get(/^\/commits\/(\w+)(?:\.\.(\w+))?$/, function(req, res){
-  var from = req.params[0];
-  var to = req.params[1] || 'HEAD';
-  res.send('commit range ' + from + '..' + to);
-});
 
-router.route('/users/:name').all(function(req, res, next) {
-  // runs for all HTTP verbs first
-  // think of it as route specific middleware!
-  res.send('hello ' + req.params.name + '!');
-  next();
-})
-.get(function(req, res, next) {
-  res.json(req.user);
-});
+router.post('/register', function(req, res){
+	var name = req.body.name;
+	var email = req.body.email;
+	var username = req.body.username;
+	var password = req.body.password;
+	var password2 = req.body.password2;
+	console.log('request at register', req.body)
+	// Validation
+	req.checkBody('name', 'Name is required').notEmpty();
+	req.checkBody('email', 'Email is required').notEmpty();
+	req.checkBody('email', 'Email is not valid').isEmail();
+	req.checkBody('username', 'Username is required').notEmpty();
+	req.checkBody('password', 'Password is required').notEmpty();
+	req.checkBody('password2', 'Passwords do not match').equals(req.body.password);
 
-router.post('/adduser', function(req, res) {
-    // Get values from POST request. These can be done through forms or REST calls. These rely on the "name" attributes for forms
-    var name = req.body.name;
-    var userName = req.body.username;
-    var userEmail = req.body.useremail;
-    var password = req.body.userpassword;
-    //call the create function for our database
-    User.create({
-        name : name,
-        username: userName,
-        email: userEmail,
-        password: password
-    }, function (err, user) {
-          if (err) {
-              res.send("There was a problem adding the information to the database.", err);
-          } else {
-              //User has been created
-              console.log('POST creating new user: ' + user);
-              res.format({
-                  //HTML response will set the location and redirect back to the home page. You could also create a 'success' page if that's your thing
-                html: function(){
-                    // If it worked, set the header so the address bar doesn't still say /adduser
-                    res.location("users");
-                    // And forward to success page
-                    res.redirect("/users");
-                },
-                //JSON response will show the newly created user
-                json: function(){
-                    res.json(user);
-                }
-            });
-          }
-    })
+	var errors = req.validationErrors();
+
+	if(errors){
+		res.render('register',{
+			errors:errors
+		});
+	} else {
+		var newUser = new User({
+			name: name,
+			email:email,
+			username: username,
+			password: password
+		});
+
+		User.createUser(newUser, function(err, user){
+			if(err) throw err;
+			console.log(user);
+		});
+
+		req.flash('success_msg', 'You are registered and can now login');
+
+		res.redirect('/auth/login');
+	}
 });
 
 module.exports = router;
