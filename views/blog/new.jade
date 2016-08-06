@@ -1,7 +1,12 @@
 extends ../layout
 
 block content
-    h1= title
+    h2 Add New Blog
+    ul
+        if errors
+            each e, i in errors
+                div= e.msg
+
     form(name="new-blog",method="post",action="/blog/new")
         input(type="text", placeholder="title", name="title")
         input(type="textarea", placeholder="write some stuff....", name="content")

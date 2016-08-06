@@ -2,9 +2,9 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var blogSchema = new Schema({
-  title: {type: String},
+  title: {type: String, required: true},
   content: { type: String, required: true},
-  created_by :{type:Schema.Types.ObjectId , ref: 'User' }
+  created_by :{type:Schema.Types.ObjectId , ref: 'User', required:true }
 });
 
 
