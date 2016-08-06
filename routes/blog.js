@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var Blog = require('../models/blog.js');
-
+var User = require('../models/user');
 function ensureAuthenticated(req, res, next) {
     if (req.isAuthenticated()) {
         return next();
@@ -10,8 +10,8 @@ function ensureAuthenticated(req, res, next) {
         res.redirect('/auth/login');
     }
 }
-router.get('/', ensureAuthenticated, function (req, res, next) {
-    Blog.find({}, function (err, blogs) {
+router.get('/',ensureAuthenticated, function (req, res, next) {
+    Blog.find({}).populate('created_by').exec(function (err, blogs) {
         if (err) {
             return console.error(err);
         } else {
@@ -24,6 +24,8 @@ router.get('/', ensureAuthenticated, function (req, res, next) {
                             blogs[i].content = blogs[i].content.substring(0, 300)
                         }
                     }
+
+
                     res.render('blog/list', {
                         "list": blogs
                     });
@@ -39,7 +41,7 @@ router.get('/', ensureAuthenticated, function (req, res, next) {
 
 
 router.get('/new', function (req, res) {
-    console.log('req', req)
+    console.log('req', req);
     res.render('blog/new', {title: 'New Blog'});
 });
 
@@ -88,7 +90,7 @@ router.post('/new', function (req, res) {
 });
 
 router.get('/:id', function (req, res, next) {
-    Blog.findById({_id: req.params.id}, function (err, blog) {
+    Blog.findById({_id: req.params.id}).populate('created_by').exec(function (err, blog) {
         if (err) {
             return console.error(err);
         } else {

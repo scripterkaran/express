@@ -7,7 +7,7 @@ block content
         each blog, i in list
             li
                 a(href='/blog/'+blog._id)= blog.title
-            p= blog
+            p= " Created by " + blog.created_by.name
 
     button
         a(href='/blog/new') Add New Blog

@@ -5,6 +5,7 @@ block content
         Welcome To Awesomeness
     ul
         if user
+            div= "Howdy, " + user.name
             li(role="presentation")
                 a(href="/blog") Dashboard
             li(role="presentation")
