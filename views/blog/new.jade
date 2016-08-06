@@ -1,8 +1,8 @@
-extends layout
+extends ../layout
 
 block content
     h1= title
-    form#formAddUser(name="newblog",method="post",action="/blog/new")
+    form(name="new-blog",method="post",action="/blog/new")
         input(type="text", placeholder="title", name="title")
         input(type="textarea", placeholder="write some stuff....", name="content")
-        button#btnSubmit(type="submit") submit
+        button(type="submit") Create

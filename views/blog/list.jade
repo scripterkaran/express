@@ -1,10 +1,10 @@
-extends layout
+extends ../layout
 
 block content
     h1.
         Blog List
     ul
-        each blog, i in bloglist
+        each blog, i in list
             li
                 a(href='/blog/'+blog._id)= blog.title
             p= blog

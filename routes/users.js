@@ -1,7 +1,6 @@
 var express = require('express');
 var router = express.Router();
 var mongoose = require('mongoose');
-//var User = require('.models/user')
 var User = require('../models/user.js');
 
 /* GET users listing. */
@@ -15,7 +14,7 @@ router.get('/', function(req, res, next) {
                   res.format({
                       //HTML response will render the userlist.jade file in the views folder. We are also setting "userlist" to be an accessible variable in our jade view
                     html: function(){
-                        res.render('userlist', {
+                        res.render('user/userlist', {
                               "userlist" : users
                           });
                     },
@@ -30,7 +29,7 @@ router.get('/', function(req, res, next) {
 
 /* GET New User page. */
 router.get('/register', function(req, res) {
-    res.render('register', { title: 'Add New User' });
+    res.render('user/register', { title: 'Add New User' });
 });
 
 
@@ -52,7 +51,7 @@ router.post('/register', function(req, res){
 	var errors = req.validationErrors();
 
 	if(errors){
-		res.render('register',{
+		res.render('user/register',{
 			errors:errors
 		});
 	} else {
