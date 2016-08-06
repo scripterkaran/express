@@ -4,6 +4,14 @@ block content
     h1.
         Welcome To Awesomeness
     ul
+        if user
+            li(role="presentation")
+                a(href="/blog") Dashboard
+            li(role="presentation")
+                a(href="/user/logout") Logout
+        else
+            li(role="presentation")
+                a(href="/user/register") Register
 
-    button
-        a(href='/auth/login') Login
+            button
+                a(href='/auth/login') Login
