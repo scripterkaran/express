@@ -14,6 +14,7 @@ var routes = require('./routes/index');
 var userRoute = require('./routes/users');
 var BlogRoute = require('./routes/blog');
 var AuthRouter = require('./routes/auth');
+var HomeRoute = require('./routes/home')
 var passport = require('passport');
 var flash    = require('connect-flash');
 var app = express();
@@ -37,8 +38,8 @@ app.use(function(req,res,next){
     next();
 });
 
-//app.use('/', routes);
-app.use('/', userRoute);
+app.use('/', HomeRoute);
+app.use('/user', userRoute);
 app.use('/blog', BlogRoute)
 app.use('/auth', AuthRouter)
 
