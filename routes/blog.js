@@ -40,13 +40,13 @@ router.get('/',ensureAuthenticated, function (req, res, next) {
 });
 
 
-router.get('/new', function (req, res) {
+router.get('/new',ensureAuthenticated, function (req, res) {
     console.log('req', req);
     res.render('blog/new', {title: 'New Blog'});
 });
 
 
-router.post('/new', function (req, res) {
+router.post('/new',ensureAuthenticated, function (req, res) {
     // Get values from POST request. These can be done through forms or REST calls. These rely on the "name" attributes for forms
     var title = req.body.title;
     var content = req.body.content;
@@ -89,7 +89,7 @@ router.post('/new', function (req, res) {
 
 });
 
-router.get('/:id', function (req, res, next) {
+router.get('/:id',ensureAuthenticated, function (req, res, next) {
     Blog.findById({_id: req.params.id}).populate('created_by').exec(function (err, blog) {
         if (err) {
             return console.error(err);
