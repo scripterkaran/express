@@ -48,10 +48,12 @@ router.post('/new', function(req, res) {
     // Get values from POST request. These can be done through forms or REST calls. These rely on the "name" attributes for forms
     var title = req.body.title;
     var content = req.body.content;
+    var creator = req.user
     //call the create function for our database
     Blog.create({
         title : title,
-        content: content
+        content: content,
+        created_by: req.user
     }, function (err, blog) {
           if (err) {
               res.send("There was a problem adding the information to the database.", err);
