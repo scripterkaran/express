@@ -1,0 +1,18 @@
+extends ../layout
+
+block content
+    h1.
+        #{blog.title}
+    ul
+        if errors
+            each e, i in errors
+                div= e.msg
+    form(action='/blog/#{blog._id}/edit',method='post',name='edit-blog',enctype='application/x-www-form-urlencoded')
+        p Title:
+            input(type="text", placeholder="title", name="title", value='#{blog.title}')
+        p Content:
+            input(type="textarea", placeholder="write some stuff....", name="content", value='#{blog.content}')
+        p
+            input(type='hidden',value='PUT',name='_method')
+        p 
+            button(type='submit') Update

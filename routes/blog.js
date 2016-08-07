@@ -110,4 +110,63 @@ router.get('/:id',ensureAuthenticated, function (req, res, next) {
         }
     });
 });
+
+router.get('/:id/edit',ensureAuthenticated, function (req, res, next) {
+    Blog.findById({_id: req.params.id}).populate('created_by').exec(function (err, blog) {
+        if (err) {
+            return console.error(err);
+        } else {
+            //respond to both HTML and JSON. JSON responses require 'Accept: application/json;' in the Request Header
+            res.format({
+                //HTML response will render the 'edit.jade' template
+                html: function(){
+                       res.render('blog/edit', {
+                          blog : blog
+                      });
+                 },
+                 //JSON response will return the JSON output
+                json: function(){
+                       res.json(blog);
+                 }
+            });
+        }
+    });
+});
+
+//POST to update a blog by ID
+router.post('/:id/edit', function(req, res) {
+    // Get our REST or form values. These rely on the "name" attributes
+    var title = req.body.title;
+    var content = req.body.content;
+
+   //find the document by ID
+        Blog.findById({_id: req.params.id}).populate('created_by').exec(function (err, blog) {
+            if (err) {
+                return console.error(err);
+            } else {
+                //update it
+                blog.update({
+                    title: title,
+                    content: content
+                }, function (err) {
+                    if (err) {
+                        res.send("There was a problem updating the information to the database: " + err);
+                    }
+                    else {
+                        //HTML responds by going back to the page or you can be fancy and create a new view that shows a success page.
+                        res.format({
+                            html: function () {
+                                res.redirect("/blog/" + blog._id);
+                            },
+                            //JSON responds showing the updated values
+                            json: function () {
+                                res.json(blog);
+                            }
+                        });
+                    }
+                })
+            }
+        });
+});
+
 module.exports = router;

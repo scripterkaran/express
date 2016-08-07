@@ -8,4 +8,6 @@ block content
 
     h5= detail.content
 
-    span= detail
+    p= " Created by " + detail.created_by.name
+
+    a(href='/blog/'+detail._id+'/edit')= " Edit "
