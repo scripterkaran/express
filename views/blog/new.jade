@@ -7,7 +7,8 @@ block content
             each e, i in errors
                 div= e.msg
 
-    form(name="new-blog",method="post",action="/blog/new")
+    form(name="new-blog",method="post",action="/blog/new" enctype="multipart/form-data")
         input(type="text", placeholder="title", name="title")
         input(type="textarea", placeholder="write some stuff....", name="content")
+        input(type="file",name="cover")
         button(type="submit") Create

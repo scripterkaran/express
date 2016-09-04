@@ -2,6 +2,13 @@ var express = require('express');
 var router = express.Router();
 var Blog = require('../models/blog.js');
 var User = require('../models/user');
+var multer = require('multer')
+
+function fullUrl(req) {
+  return  req.protocol + '://' + req.get('host');
+}
+
+
 function ensureAuthenticated(req, res, next) {
     if (req.isAuthenticated()) {
         return next();
@@ -10,7 +17,7 @@ function ensureAuthenticated(req, res, next) {
         res.redirect('/auth/login');
     }
 }
-router.get('/',ensureAuthenticated, function (req, res, next) {
+router.get('/',function (req, res, next) {
     Blog.find({}).populate('created_by').exec(function (err, blogs) {
         if (err) {
             return console.error(err);
@@ -24,7 +31,11 @@ router.get('/',ensureAuthenticated, function (req, res, next) {
                             blogs[i].content = blogs[i].content.substring(0, 300)
                         }
                     }
-
+                    for (i = 0; i < blogs.length; i++) {
+                        if (blogs[i].cover) {
+                            blogs[i].cover  =  fullUrl(req) +'/'+ blogs[i].cover
+                        }
+                    }
 
                     res.render('blog/list', {
                         "list": blogs
@@ -41,16 +52,16 @@ router.get('/',ensureAuthenticated, function (req, res, next) {
 
 
 router.get('/new',ensureAuthenticated, function (req, res) {
-    console.log('req', req);
     res.render('blog/new', {title: 'New Blog'});
 });
 
 
-router.post('/new',ensureAuthenticated, function (req, res) {
+router.post('/new',ensureAuthenticated,  multer({ dest: './images/blog/cover'}).single('cover'), function (req, res) {
     // Get values from POST request. These can be done through forms or REST calls. These rely on the "name" attributes for forms
     var title = req.body.title;
     var content = req.body.content;
     var creator = req.user;
+    console.log(req.file); //form files
     //call the create function for our database
     req.checkBody('title', 'Title is required.').notEmpty();
     req.checkBody('content', 'Content is required.').notEmpty();
@@ -61,10 +72,12 @@ router.post('/new',ensureAuthenticated, function (req, res) {
             errors: errors
         });
     } else {
+        var file = req.file.path
         Blog.create({
             title: title,
             content: content,
-            created_by: req.user
+            created_by: req.user,
+            cover : file // this is fked up! Express has no auto handling here, not that I could find.
         }, function (err, blog) {
             if (err) {
                 res.send("There was a problem adding the information to the database.", err);

@@ -20,6 +20,8 @@ var BlogRoute = require('./routes/blog');
 var AuthRouter = require('./routes/auth');
 var HomeRoute = require('./routes/home')
 
+
+
 var app = express();
 
 // view engine setup
