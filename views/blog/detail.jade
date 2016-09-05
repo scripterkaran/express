@@ -11,3 +11,13 @@ block content
     p= " Created by " + detail.created_by.name
 
     a(href='/blog/'+detail._id+'/edit')= " Edit "
+
+    if comments
+        each comment, i in comments
+            p= " Comment" + comment.slug
+            span= "by: " + comment.created_by.name
+
+
+    form(name="new-comment",method="post",action="/blog/" + detail._id + "/comments")
+        input(type="textarea", placeholder="title", name="slug")
+        button(type="submit") Create
